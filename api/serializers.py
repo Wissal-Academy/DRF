@@ -21,7 +21,7 @@ class TaskSerializer(serializers.ModelSerializer):
 
 
 class ProjectSerializer(serializers.ModelSerializer):
-    owner = serializers.StringRelatedField()
+    # owner = serializers.StringRelatedField()
     tasks = TaskSerializer(many=True, read_only=True)
 
     class Meta:
@@ -33,3 +33,33 @@ class ProjectSerializer(serializers.ModelSerializer):
             'owner',
             'tasks'
         ]
+
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['id', 'username', 'email', 'first_name', 'last_name']
+
+
+class RegisterSerializer(serializers.ModelSerializer):
+    first_name = serializers.CharField(required=True)
+    last_name = serializers.CharField(required=True)
+
+    class Meta:
+        model = User
+        fields = [
+            'username',
+            'email',
+            'first_name',
+            'last_name',
+            'password'
+        ]
+
+    def create(self, validate_data):
+        return User.objects.create(
+            username=validate_data["username"],
+            email=validate_data["email"],
+            password=validate_data["password"],
+            last_name=validate_data["last_name"],
+            first_name=validate_data["first_name"]
+        )
