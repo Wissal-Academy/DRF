@@ -5,6 +5,8 @@ from .models import Task, Project
 
 
 class TaskSerializer(serializers.ModelSerializer):
+    # assigned_to = serializers.StringRelatedField()
+
     class Meta:
         model = Task
         fields = [
@@ -19,11 +21,15 @@ class TaskSerializer(serializers.ModelSerializer):
 
 
 class ProjectSerializer(serializers.ModelSerializer):
+    owner = serializers.StringRelatedField()
+    tasks = TaskSerializer(many=True, read_only=True)
+
     class Meta:
         model = Project
         fields = [
             'id',
             'name',
             'description',
-            'owner'
+            'owner',
+            'tasks'
         ]
