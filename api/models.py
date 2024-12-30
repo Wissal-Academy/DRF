@@ -14,10 +14,10 @@ class Project(models.Model):
 class Task(models.Model):
     title = models.CharField(max_length=200)
     description = models.TextField(blank=True)
-    assigned_to = models.ForeignKey(User, on_delete=models.CASCADE)
     completed = models.BooleanField()
     priority = models.IntegerField()
 
+    assigned_to = models.ForeignKey(User, on_delete=models.CASCADE)
     project = models.ForeignKey('api.Project', on_delete=models.CASCADE)
 
     def __str__(self):
