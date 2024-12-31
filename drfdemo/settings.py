@@ -1,5 +1,6 @@
 from pathlib import Path
 from datetime import timedelta
+import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -16,8 +17,49 @@ DEBUG = True
 ALLOWED_HOSTS = ["*"]
 
 
-# Application definition
+STATIC_URL = 'https://s3.erp-beast.com/wa-academy/static'
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles") # IT SHOULD BE IGNORED BY DJANGO
 
+# MinIO Configuration Using "django-storages"
+STORAGES = {
+    "default": {
+        "BACKEND": "storages.backends.s3boto3.S3Boto3Storage",
+        "OPTIONS": {
+            "access_key": "SoVaSe71NqoGOpZx0uVb",
+            "secret_key": "67rGMwbYxExyicmbjyFbDw0e7zmNbuqzvc9OsGz4",
+            "bucket_name": "wa-academy",
+            "endpoint_url": "https://s3.erp-beast.com",
+            "region_name": None,  # MinIO does not require a region
+            "default_acl": "public-read",
+            "querystring_auth": False,  # Change to True if you want querystring authentication
+            "object_parameters": {
+                "CacheControl": "max-age=86400",
+            },
+        },
+    },
+    "staticfiles": {
+        "BACKEND": "storages.backends.s3boto3.S3Boto3Storage",
+        "OPTIONS": {
+            "access_key": "SoVaSe71NqoGOpZx0uVb",
+            "secret_key": "67rGMwbYxExyicmbjyFbDw0e7zmNbuqzvc9OsGz4",
+            "bucket_name": "wa-academy",
+            "endpoint_url": "https://s3.erp-beast.com",
+            "region_name": None,
+            "default_acl": "public-read",
+            "object_parameters": {
+                "CacheControl": "max-age=86400",
+            },
+        },
+    },
+}
+
+DEFAULT_FILE_STORAGE = "storages.backends.S3Boto3Storage"
+STATICFILES_STORAGE = "storages.backends.s3.S3Storage"
+
+CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_CREDENTIALS = True
+
+# Application definition
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -131,10 +173,6 @@ USE_I18N = True
 USE_TZ = True
 
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/5.1/howto/static-files/
-
-STATIC_URL = 'static/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
