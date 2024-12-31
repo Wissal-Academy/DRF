@@ -20,6 +20,18 @@ class TaskSerializer(serializers.ModelSerializer):
         ]
 
 
+class TaskMinSerializer(serializers.ModelSerializer):
+    # assigned_to = serializers.StringRelatedField()
+
+    class Meta:
+        model = Task
+        fields = [
+            'id',
+            'title',
+            'completed'
+        ]
+
+
 class ProjectSerializer(serializers.ModelSerializer):
     owner = serializers.StringRelatedField()
     tasks = TaskSerializer(many=True, read_only=True)
@@ -33,6 +45,15 @@ class ProjectSerializer(serializers.ModelSerializer):
             'owner',
             'tasks',
             'document'
+        ]
+
+
+class ProjectMinSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Project
+        fields = [
+            'id',
+            'name'
         ]
 
 
