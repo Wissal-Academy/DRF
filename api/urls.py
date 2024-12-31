@@ -7,6 +7,7 @@ from .views import (
     TaskListCreateView,
     TaskDetailView,
     TaskSearchAPIView,
+    TaskSearch2APIView,
     # REGISTER
     RegisterView
 )
@@ -25,6 +26,7 @@ urlpatterns = [
     path('task/detail/<pk>', TaskDetailView.as_view()),
     # Search API VIEW FOR TASK
     path('task/search', TaskSearchAPIView.as_view()),
+    path('task/search2', TaskSearch2APIView.as_view()),
     # PROJECT/register
     path('register', RegisterView.as_view())
 ]

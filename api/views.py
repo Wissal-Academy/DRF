@@ -10,6 +10,7 @@ from rest_framework import permissions
 from rest_framework_simplejwt.tokens import RefreshToken
 
 from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.filters import SearchFilter, OrderingFilter
 
 from .models import Task, Project
 from .filters import ProjectFitler, TaskFitler
@@ -107,3 +108,15 @@ class TaskSearchAPIView(ListAPIView):
 
     #     serializer = TaskMinSerializer(tasks, many=True)
     #     return Response(serializer.data)
+
+
+# TODO:  FIX search view
+class TaskSearch2APIView(ListAPIView):
+    permission_classes = [permissions.AllowAny]
+    # Data
+    queryset = Task.objects.all()
+    serializer_class = TaskMinSerializer
+    # Filters
+    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
+    filterset_fields = ['title']
+    search_fields = ['title']
