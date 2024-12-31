@@ -9,8 +9,17 @@ from rest_framework.generics import (
 from rest_framework import permissions
 from rest_framework_simplejwt.tokens import RefreshToken
 
+from django_filters.rest_framework import DjangoFilterBackend
+
 from .models import Task, Project
-from .serializers import TaskSerializer, ProjectSerializer, RegisterSerializer, ProjectMinSerializer, TaskMinSerializer
+from .filters import ProjectFitler, TaskFitler
+from .serializers import (
+    TaskSerializer,
+    ProjectSerializer,
+    RegisterSerializer,
+    ProjectMinSerializer,
+    TaskMinSerializer
+)
 
 
 class RegisterView(APIView):
@@ -48,14 +57,14 @@ class ProjectListCreateView(ListCreateAPIView):
 
 # django-filter
 class ProjectMinAPIView(ListAPIView):
+    # Permissions
     permission_classes = [permissions.AllowAny]
-    # queryset = Project.objects.all()
+    # Data
+    queryset = Project.objects.all()
     serializer_class = ProjectMinSerializer
-
-    def get_queryset(self):
-        # /URL/...?<param=&?param2=&?=
-        name = self.request.query_params.get('name')
-        return Project.objects.filter(name__icontains=name)
+    # Filters
+    filter_backends = [DjangoFilterBackend]
+    filterset_class = ProjectFitler
 
 
 class ProjectDetailView(RetrieveUpdateDestroyAPIView):
@@ -74,21 +83,27 @@ class TaskDetailView(RetrieveUpdateDestroyAPIView):
     serializer_class = TaskSerializer
 
 
-class TaskSearchAPIView(APIView):
+class TaskSearchAPIView(ListAPIView):
     permission_classes = [permissions.AllowAny]
+    # Data
+    queryset = Task.objects.all()
+    serializer_class = TaskMinSerializer
+    # Filters
+    filter_backends = [DjangoFilterBackend]
+    filterset_class = TaskFitler
 
-    def get(self, request):
-        # default queryset
-        tasks = Task.objects.all()
-        # Params
-        title = request.query_params.get('title', None)
-        completed = request.query_params.get('completed', None)
+    # def get(self, request):
+    #     # default queryset
+    #     tasks = Task.objects.all()
+    #     # Params
+    #     title = request.query_params.get('title', None)
+    #     completed = request.query_params.get('completed', None)
 
-        if title:
-            tasks = tasks.filter(title__icontains=title)
-        if completed is not None:
-            completed = completed.lower() in ['true', 1]
-            tasks = tasks.filter(completed=completed)
+    #     if title:
+    #         tasks = tasks.filter(title__icontains=title)
+    #     if completed is not None:
+    #         completed = completed.lower() in ['true', 1]
+    #         tasks = tasks.filter(completed=completed)
 
-        serializer = TaskMinSerializer(tasks, many=True)
-        return Response(serializer.data)
+    #     serializer = TaskMinSerializer(tasks, many=True)
+    #     return Response(serializer.data)

@@ -70,6 +70,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # THIRD PARTY APPS
     'rest_framework',
+    'django_filters',
     # CUSTOM APPS
     'api',
 ]
@@ -90,6 +91,10 @@ REST_FRAMEWORK = {
         "rest_framework.parsers.FormParser",
         # Use of files / media
         "rest_framework.parsers.MultiPartParser"
+    ],
+    # ADD THE DJANGO FILTER APP TO THE REST FRAMEWORK
+    "DEFAULT_FILTER_BACKENDS": [
+        'django_filters.rest_framework.DjangoFilterBackend'
     ]
 }
 
