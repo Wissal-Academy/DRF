@@ -6,6 +6,7 @@ from rest_framework.generics import (
     RetrieveUpdateDestroyAPIView
 )
 from rest_framework import permissions
+from rest_framework_simplejwt.tokens import RefreshToken
 
 from .models import Task, Project
 from .serializers import TaskSerializer, ProjectSerializer, RegisterSerializer
@@ -18,15 +19,18 @@ class RegisterView(APIView):
         serializer = RegisterSerializer(data=request.data)
         if serializer.is_valid():
             user = serializer.save()
+            refresh = RefreshToken.for_user(user)
+            access = refresh.access_token
             return Response(
                 {
                     "user": {
                         "username": user.username,
                         "email": user.email,
                         "first_name": user.first_name,
-                        "last_name": user.last_name,
-                        "message": "THIS IS AN EMPTY MESSAGE ONLY"
-                    }
+                        "last_name": user.last_name
+                    },
+                    "refresh": str(refresh),
+                    "access": str(access)
                 },
                 status=status.HTTP_201_CREATED
             )

@@ -1,5 +1,5 @@
 from pathlib import Path
-
+from datetime import timedelta
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -32,10 +32,31 @@ INSTALLED_APPS = [
 ]
 
 REST_FRAMEWORK = {
+    # Force All users to be authenticated to use the ressources
     "DEFAULT_PERMISSION_CLASSES": [
-        "rest_framework.permissions.AllowAny"
+        "rest_framework.permissions.IsAuthenticated"
+    ],
+    # USE the JWT AS default
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
+    ],
+    "DEFAULT_PARSER_CLASSES": [
+        # Enforce the response to be JSON
+        "rest_framework.parsers.JSONParser",
+        # Use the Forms
+        "rest_framework.parsers.FormParser",
+        # Use of files / media
+        "rest_framework.parsers.MultiPartParser"
     ]
 }
+
+
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=45),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
+    "AUTH_HEADER_TYPES": ("Bearer",),
+}
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
