@@ -21,7 +21,7 @@ class TaskSerializer(serializers.ModelSerializer):
 
 
 class ProjectSerializer(serializers.ModelSerializer):
-    # owner = serializers.StringRelatedField()
+    owner = serializers.StringRelatedField()
     tasks = TaskSerializer(many=True, read_only=True)
 
     class Meta:
@@ -31,7 +31,8 @@ class ProjectSerializer(serializers.ModelSerializer):
             'name',
             'description',
             'owner',
-            'tasks'
+            'tasks',
+            'document'
         ]
 
 

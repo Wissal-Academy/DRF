@@ -17,8 +17,9 @@ DEBUG = True
 ALLOWED_HOSTS = ["*"]
 
 
-STATIC_URL = 'https://s3.erp-beast.com/wa-academy/static'
-STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles") # IT SHOULD BE IGNORED BY DJANGO
+STATIC_URL = 'https://s3.erp-beast.com/wa-academy/static/'
+# IT SHOULD BE IGNORED BY DJANGO
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 
 # MinIO Configuration Using "django-storages"
 STORAGES = {
